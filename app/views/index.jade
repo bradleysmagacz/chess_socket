@@ -1,0 +1,36 @@
+include head.jade
+body
+	include nav.jade
+	section(ng-view)
+
+	if user
+		script(type="text/javascript").
+			window.user = !{user};
+	else
+		script(type="text/javascript").
+			window.user = null;
+	
+	script(type="text/javascript", src="js/bootstrap.min.js")
+	script(type="text/javascript", src="js/retina.js")
+	script(type="text/javascript", src="js/jquery.fancybox.pack.js")
+	script(type="text/javascript", src="js/scripts.js")
+	script(type="text/javascript", src="js/jquery.flexslider-min.js")
+	script(type="text/javascript", src="js/classie.js")
+	script(type="text/javascript", src="js/jquery.waypoints.min.js")
+	script(type="text/javascript", src="/socket.io/socket.io.js")
+	script(type="text/javascript", src="/lib/angular/angular.min.js")
+	script(type="text/javascript", src="/lib/angular-route/angular-route.js")
+	script(type="text/javascript", src="/lib/angular-resource/angular-resource.js")
+	script(type="text/javascript", src="/index/index.client.module.js")
+	script(type="text/javascript", src="/index/controllers/index.client.controller.js")
+	script(type="text/javascript", src="/index/config/index.client.routes.js")
+	script(type="text/javascript", src="/chess/chess.client.module.js")
+	script(type="text/javascript", src="/chess/controllers/chess.client.controller.js")
+	script(type="text/javascript", src="/chess/services/socket.client.service.js")
+	script(type="text/javascript", src="/chess/config/chess.client.routes.js")
+	script(type="text/javascript", src="/users/users.client.module.js")
+	script(type="text/javascript", src="/users/services/authentication.client.service.js")
+	script(type="text/javascript", src="/account/account.client.module.js")
+	script(type="text/javascript", src="/account/controllers/account.client.controller.js")
+	script(type="text/javascript", src="/account/config/account.client.routes.js")
+	script(type="text/javascript", src="/application.js")
