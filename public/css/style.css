@@ -11,6 +11,12 @@ ul {
   list-style-type: none;
 }
 
+#moves {
+  position: absolute;
+  top: 30%;
+  left: 50%;
+}
+
 #header {
     position: fixed;
     z-index: 10000;
