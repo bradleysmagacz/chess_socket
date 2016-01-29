@@ -1,9 +1,16 @@
 angular.module('chess').controller('ChessController', ['$scope', 'Socket',
 	function($scope, Socket) {
 
-		Socket.on('move', function (message) {
-    		game.move(message);
+		$scope.moves = [];
+
+		Socket.on('move', function(move) {
+    		game.move(move);
     		board.position(game.fen());
+    		$scope.moves.push(move);
+		});
+
+		Socket.on('message', function(message) {
+    		$scope.messages.push(message);
 		});
 
 		// do not pick up pieces if the game is over
@@ -23,9 +30,14 @@ angular.module('chess').controller('ChessController', ['$scope', 'Socket',
 				promotion: 'q'
 			});
 
+			var message = {
+				text: 'HELLLLLOOOOO'
+			}
+
 			if (move === null) {
 				return 'snapback';
-			} else { 
+			} else {
+				updateStatus();
 				Socket.emit('move', move);
 			}
 		};
@@ -41,36 +53,39 @@ angular.module('chess').controller('ChessController', ['$scope', 'Socket',
 		var game = new Chess();
 
 		var updateStatus = function() {
-		  var status = '';
+		  /*var status = '';
 
 		  var moveColor = 'White';
 		  if (game.turn() === 'b') {
 		    moveColor = 'Black';
+		  }*/
+
+		  var gameOver = game.in_checkmate();
+		  var stalemate = game.in_draw();
+		  
+		  if (gameOver) {
+		  	status = 'Game over, stalemate';
+		    Socket.emit('gameOver', gameOver);
 		  }
 
-		  // checkmate?
-		  if (game.in_checkmate() === true) {
-		    status = 'Game over, ' + moveColor + ' is in checkmate.';
-		  }
-
-		  // draw?
-		  else if (game.in_draw() === true) {
-		    status = 'Game over, drawn position';
+		  else if (stalemate) {
+		    status = 'Game over, stalemate';
+		    Socket.emit('stalemate', stalemate);
 		  }
 
 		  // game still on
-		  else {
+		  /*else {
 		    status = moveColor + ' to move';
 
 		    // check?
 		    if (game.in_check() === true) {
 		      status += ', ' + moveColor + ' is in check';
 		    }
-		  }
+		  }*/
 
-		  statusEl.html(status);
-		  fenEl.html(game.fen());
-		  pgnEl.html(game.pgn());
+		  //statusEl.html(status);
+		  //fenEl.html(game.fen());
+		  //pgnEl.html(game.pgn());
 		};
 
 		var toggleOrientation = function() {
@@ -85,16 +100,15 @@ angular.module('chess').controller('ChessController', ['$scope', 'Socket',
 		$scope.flipBoard = function() {
 			toggleOrientation();
 		};
+
+		$scope.sendMessage = function() {
+			var message = {
+				text: this.messageText
+			}
+
+			Socket.emit('message', message);
+
+			this.messageText = '';
+		};
 	}
 ]);
-
-/*angular.module('chess').directive('flipBoard', [function() {
-    return {
-        scope: { board: '=' },
-        link: function(scope, element, attrs) {
-            element.bind('click', function() {
-                alert('hi');
-            });
-        }
-    };
-}]);*/

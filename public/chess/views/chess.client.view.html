@@ -1,6 +1,19 @@
 <section ng-controller="ChessController">
 	<div id="gameBoard"></div>
-	<button id="flip" ng-click="flipBoard()" style="position:absolute; top:50%; left:50%">FLIP</button>
+	<button id="flip" ng-click="flipBoard()" style="position:absolute; top:20%; left:50%">FLIP</button>
+	<div id="moves">
+		<div data-ng-repeat="move in moves" data-ng-switch="move.type">
+			<strong data-ng-switch-when='status' class="chat-status">
+				<span data-ng-bind="move.created | date:'mediumTime'"></span>
+				<span data-ng-bind="move.username"></span><span><span>&nbsp;</span><span data-ng-bind="move.text">
+			</strong>
+			<span data-ng-switch-default> 
+				<span data-ng-bind="move.created | date:'mediumTime'"></span> 
+				<span data-ng-bind="move.username"></span><span> moved to</span> 
+				<span data-ng-bind="move.position"></span> 
+			</span> 
+		</div>
+	</div>
 </section> 
 <script src="../js/chess.js"></script>
 <script src="../js/chessboard-0.3.0.js"></script>
