@@ -26,6 +26,22 @@ var UserSchema =  new Schema({
   		first: String, 
   		last: String 
   },
+  rating: {
+      type: Number,
+      default: 1500
+  },
+  wins: {
+      type: Number,
+      default: 0
+  },
+  losses: {
+      type: Number,
+      default: 0
+  },
+  draws: {
+      type: Number,
+      default: 0
+  },
 	password: { 
   		type: String, 
   		required: true 
@@ -56,6 +72,11 @@ UserSchema.plugin(createdDate);
 //Virtual function to return full name
 UserSchema.virtual('fullname').get(function () {
   return this.name.first + ' ' + this.name.last;
+});
+
+//Virtual function to return user's record
+UserSchema.virtual('record').get(function() {
+  return this.wins + 'W-' + this.losses + 'L-' + this.draws + 'D';
 });
 
 UserSchema.set('toJSON', { getters: true, virtuals: true });
